@@ -9,14 +9,12 @@ import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntit
  * @author zhangqing
  *
  */
-public class DeleteHistoricActivityInstanceCommand implements Command<HistoricActivityInstanceEntity> {
+public class MarkBackHistoricActivityInstanceCommand implements Command<HistoricActivityInstanceEntity> {
 
 	private String activityId;
 	private String processInstanceId;
 	
-	protected DeleteHistoricActivityInstanceCommand(){}
-	
-	public DeleteHistoricActivityInstanceCommand(String activityId, String processInstanceId){
+	public MarkBackHistoricActivityInstanceCommand(String activityId, String processInstanceId){
 		this.activityId = activityId;
 		this.processInstanceId = processInstanceId;
 	}
@@ -26,7 +24,7 @@ public class DeleteHistoricActivityInstanceCommand implements Command<HistoricAc
 		HistoricActivityInstanceEntity entity = commandContext.getHistoricActivityInstanceEntityManager()
 				.findHistoricActivityInstance(activityId, processInstanceId);
 		if(entity != null){
-			commandContext.getDbSqlSession().delete("deleteHistoricActivityInstancesByActivityIdAndProcessInstanceId", entity);
+			commandContext.getDbSqlSession().update("markBackHistoricActivityInstanceByActivityIdAndProcessInstanceId", entity);
 		}
 		return entity;
 	}

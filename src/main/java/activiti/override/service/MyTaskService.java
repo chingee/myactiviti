@@ -28,6 +28,6 @@ public interface MyTaskService {
 	 * @param targetActivitiId
 	 * @return
 	 */
-//	boolean validateTargetActivitiId(String sourceActivitiId, String targetActivitiId);
+	boolean validateTargetActivitiId(String sourceActivitiId, String targetActivitiId);
 	
 }
