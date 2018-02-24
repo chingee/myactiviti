@@ -12,7 +12,7 @@ public interface MyTaskService {
 	 * @param taskId
 	 * @return
 	 */
-	List<Task> back(String taskId, Map<String, Object> variables);
+	List<Task> back(String taskId, Map<String, Object> variables, String deleteReason);
 	
 	/**
 	 * 退到指定流程图节点
@@ -20,7 +20,7 @@ public interface MyTaskService {
 	 * @param targetActivitiId
 	 * @return
 	 */
-	List<Task> back(String taskId, String targetActivitiId, Map<String, Object> variables);
+	List<Task> back(String taskId, String targetActivitiId, Map<String, Object> variables, String deleteReason);
 	
 	/**
 	 * 校验当前节点是否可以退回到指定节点

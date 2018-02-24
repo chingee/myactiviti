@@ -58,7 +58,7 @@ function showbiggerTrackFlow(processDefinitionId, processInstanceId, isSvg){
 		$("#flowimg").attr("src", basePath + "processinstance/trace/" + processInstanceId + "?_date="+new Date().getTime());
 	}
 	$("#biggerimg").modal("show");
-	window.setInterval("reinitIframe()", 200);
+//	window.setInterval("reinitIframe()", 200);
 }
 
 function hidebiggerFlow(){

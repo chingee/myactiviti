@@ -24,15 +24,15 @@ public class MyTaskServiceImpl extends ServiceImpl implements MyTaskService {
 	}
 	
 	@Override
-	public List<Task> back(String taskId, Map<String, Object> variables) {
+	public List<Task> back(String taskId, Map<String, Object> variables, String deleteReason) {
 		log.debug("处理的taskId:" + taskId);
-		return commandExecutor.execute(new ProcessInstanceBackCommand(taskId, null, variables));
+		return commandExecutor.execute(new ProcessInstanceBackCommand(taskId, null, variables, deleteReason));
 	}
 
 	@Override
-	public List<Task> back(String taskId, String targetActivitiId, Map<String, Object> variables) {
+	public List<Task> back(String taskId, String targetActivitiId, Map<String, Object> variables, String deleteReason) {
 		log.debug("处理的taskId:" + taskId + ",处理的targetActivitiId:" + targetActivitiId);
-		return commandExecutor.execute(new ProcessInstanceBackCommand(taskId, targetActivitiId, variables));
+		return commandExecutor.execute(new ProcessInstanceBackCommand(taskId, targetActivitiId, variables, deleteReason));
 	}
 
 	@Override

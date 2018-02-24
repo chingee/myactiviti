@@ -1,6 +1,8 @@
 package activiti.override.command;
 
-import org.activiti.engine.impl.interceptor.Command;
+import java.util.List;
+
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntity;
 
@@ -9,7 +11,7 @@ import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntit
  * @author zhangqing
  *
  */
-public class MarkBackHistoricActivityInstanceCommand implements Command<HistoricActivityInstanceEntity> {
+public class MarkBackHistoricActivityInstanceCommand extends MyCommand<HistoricActivityInstanceEntity> {
 
 	private String activityId;
 	private String processInstanceId;
@@ -21,12 +23,13 @@ public class MarkBackHistoricActivityInstanceCommand implements Command<Historic
 	
 	@Override
 	public HistoricActivityInstanceEntity execute(CommandContext commandContext) {
-		HistoricActivityInstanceEntity entity = commandContext.getHistoricActivityInstanceEntityManager()
-				.findHistoricActivityInstance(activityId, processInstanceId);
-		if(entity != null){
-			commandContext.getDbSqlSession().update("markBackHistoricActivityInstanceByActivityIdAndProcessInstanceId", entity);
+		List<HistoricActivityInstance> historicActivityInstances = historyService.createHistoricActivityInstanceQuery()
+				.processInstanceId(processInstanceId).activityId(activityId).orderByActivityId().desc().list();
+		if(!historicActivityInstances.isEmpty()){
+			commandContext.getDbSqlSession().update("markBackHistoricActivityInstanceByActivityIdAndProcessInstanceId", historicActivityInstances.get(0));
+			return (HistoricActivityInstanceEntity)(historicActivityInstances.get(0));
 		}
-		return entity;
+		return null;
 	}
 
 }
