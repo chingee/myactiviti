@@ -118,6 +118,7 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
 			List<Task> currentTasks = taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId())
 				.list();
 			turnTransition(task.getId(), currentActivityImpl, needBacks);
+			List<ActivityImpl> endActivityImpls = findEndActivityImpl(processDefinitionEntity);
 			for (Task t : currentTasks) {
 				if(t.getId().equals(task.getId())){
 					continue;
@@ -128,7 +129,12 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
 					continue;
 				}  
 				findOtherPassedActivityImpl(otherActivityImpl, needBacks, null);
-				turnTransition(t.getId(), otherActivityImpl, findEndActivityImpl(processDefinitionEntity));
+				turnTransition(t.getId(), otherActivityImpl, endActivityImpls);
+			}
+			if(!currentTasks.isEmpty()){
+				for (ActivityImpl activityImpl : endActivityImpls) {
+					myTaskService.deleteEndHistoricActivityInstance(activityImpl.getId(), task.getProcessInstanceId());
+				}
 			}
 		}
 	}
@@ -262,7 +268,8 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
         	targetActivityImpl.getIncomingTransitions().remove(newTransition);  
         	
         	// 还原以前流向  
-        	restoreTransition(currentActivityImpl, oriPvmTransitionList);  
+        	restoreTransition(currentActivityImpl, oriPvmTransitionList);
+        	
 		}
     }
 	
