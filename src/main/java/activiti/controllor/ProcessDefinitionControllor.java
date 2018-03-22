@@ -93,7 +93,7 @@ public class ProcessDefinitionControllor extends RestControllor{
 		ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
 		log.debug(processInstance.getProcessDefinitionName() + "流程已经启动");
 		log.debug("流程实例id: " + processInstance.getId());
-		return "/task/querylist/" + processInstance.getId();
+		return "task/querylist/" + processInstance.getId();
 	}
 	
 }

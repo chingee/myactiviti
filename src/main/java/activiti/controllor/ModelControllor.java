@@ -43,7 +43,7 @@ public class ModelControllor extends RestControllor implements ModelDataJsonCons
 	@RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
 	public String getStencilset() {
 		InputStream stencilsetStream = this.getClass().getClassLoader()
-				.getResourceAsStream("stencilset/stencilset.json");
+				.getResourceAsStream("stencilset/stencilset-en_US.json");
 		String json = "";
 		try {
 			json = IOUtils.toString(stencilsetStream, "utf-8");

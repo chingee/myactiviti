@@ -58,6 +58,7 @@ function showbiggerTrackFlow(processDefinitionId, processInstanceId, isSvg){
 		$("#flowimg").attr("src", basePath + "processinstance/trace/" + processInstanceId + "?_date="+new Date().getTime());
 	}
 	$("#biggerimg").modal("show");
+//	window.setInterval("reinitIframe()", 200);
 }
 
 function hidebiggerFlow(){
@@ -227,4 +228,15 @@ function deleteModel(modelId){
 			$("#errortext").html(e.responseText);
 		}
 	});
+}
+
+function reinitIframe() {
+	var iframe = document.getElementById("flowimg");
+	try {
+		var bHeight = iframe.contentWindow.document.body.scrollHeight;
+		var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+		var height = Math.max(bHeight, dHeight);
+		iframe.height = height;
+		console.log(height);
+	} catch(ex) {}
 }

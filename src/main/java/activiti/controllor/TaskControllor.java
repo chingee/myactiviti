@@ -65,7 +65,7 @@ public class TaskControllor extends RestControllor{
 			@RequestParam Map<String, String> json){
 		Map<String, Object> variables = new HashMap<>();
 		variables.putAll(json);
-		myTaskService.back(taskId, variables);
+		myTaskService.back(taskId, variables, "退回");
 		return "task/querylist/"+processInstanceId;
 	}
 	
@@ -76,7 +76,7 @@ public class TaskControllor extends RestControllor{
 			@RequestParam Map<String, String> json){
 		Map<String, Object> variables = new HashMap<>();
 		variables.putAll(json);
-		myTaskService.back(taskId, toTaskId, variables);
+		myTaskService.back(taskId, toTaskId, variables, "退回");
 		return "task/querylist/"+processInstanceId;
 	}
 

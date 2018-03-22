@@ -7,6 +7,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.interceptor.Command;
 
+import activiti.override.service.MyTaskService;
 import activiti.util.BeanUtil;
 
 public abstract class MyCommand<T> implements Command<T>{
@@ -17,12 +18,15 @@ public abstract class MyCommand<T> implements Command<T>{
 	protected HistoryService historyService;
 	protected ManagementService managementService;
 	
+	protected MyTaskService myTaskService;
+	
 	public MyCommand(){
 		repositoryService = BeanUtil.getBean("repositoryService");
 		runtimeService = BeanUtil.getBean("runtimeService");
 		taskService = BeanUtil.getBean("taskService");
 		historyService = BeanUtil.getBean("historyService");
 		managementService = BeanUtil.getBean("managementService");
+		myTaskService = BeanUtil.getBean("myTaskService");
 	}
 	
 }
