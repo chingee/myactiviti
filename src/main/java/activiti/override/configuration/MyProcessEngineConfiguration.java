@@ -1,10 +1,7 @@
 package activiti.override.configuration;
 
-import java.io.InputStream;
-
 import org.activiti.engine.ProcessEngine;
 import org.activiti.spring.SpringProcessEngineConfiguration;
-import org.springframework.util.StringUtils;
 
 import activiti.override.factory.engine.MyProcessEngineImpl;
 import activiti.override.service.MyTaskService;
@@ -33,13 +30,13 @@ public class MyProcessEngineConfiguration extends SpringProcessEngineConfigurati
 	/**
 	 * 重新定义mybatis配置sql
 	 */
-	@Override
-	protected InputStream getMyBatisXmlConfigurationSteam() {
-		if(StringUtils.isEmpty(getMappingFile())){
-			return getResourceAsStream(MY_MYBATIS_MAPPING_FILE);
-		}
-		return getResourceAsStream(getMappingFile());
-	}
+//	@Override
+//	protected InputStream getMyBatisXmlConfigurationSteam() {
+//		if(StringUtils.isEmpty(getMappingFile())){
+//			return getResourceAsStream(MY_MYBATIS_MAPPING_FILE);
+//		}
+//		return getResourceAsStream(getMappingFile());
+//	}
 
 	@Override
 	protected void initServices() {

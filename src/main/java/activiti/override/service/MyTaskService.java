@@ -30,11 +30,4 @@ public interface MyTaskService {
 	 */
 	boolean validateTargetActivitiId(String sourceActivitiId, String targetActivitiId);
 	
-	/**
-	 * 退回后删除指向结束的历史节点
-	 * @param endActivitiId
-	 * @param processInstanceId
-	 */
-	void deleteEndHistoricActivityInstance(String endActivitiId, String processInstanceId);
-	
 }

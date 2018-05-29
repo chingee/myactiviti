@@ -1,7 +1,5 @@
 package activiti.override.command;
 
-import java.util.List;
-
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.impl.interceptor.CommandContext;
 
@@ -22,10 +20,10 @@ public class DeleteEndHistoricActivityInstanceCommand extends MyCommand<Void> {
 	
 	@Override
 	public Void execute(CommandContext commandContext) {
-		List<HistoricActivityInstance> endActivityInstances = historyService.createHistoricActivityInstanceQuery()
-			.activityId(endActivitiId).processInstanceId(processInstanceId).list();
-		if(endActivityInstances != null && !endActivityInstances.isEmpty()){
-			commandContext.getDbSqlSession().delete("deleteEndHistoricActivityInstanceByActivityIdAndProcessInstanceId", endActivityInstances.get(0));
+		HistoricActivityInstance historicActivityInstance = commandContext.getHistoricActivityInstanceEntityManager()
+				.findHistoricActivityInstance(endActivitiId, processInstanceId);
+		if(historicActivityInstance != null){
+			commandContext.getDbSqlSession().delete("deleteEndHistoricActivityInstanceByActivityIdAndProcessInstanceId", historicActivityInstance);
 		}
 		return null;
 	}

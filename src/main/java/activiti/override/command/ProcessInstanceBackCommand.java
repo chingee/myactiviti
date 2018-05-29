@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
+import org.activiti.engine.impl.cmd.CompleteTaskCmd;
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -39,6 +40,8 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
 		BACK_CONDITION = new HashMap<String, Object>();
 		BACK_CONDITION.put("pass", "1");
 	}
+	
+	protected CommandContext commandContext;
 	
 	/**
 	 * 当前任务id
@@ -75,6 +78,7 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
 	
 	@Override
 	public List<Task> execute(CommandContext commandContext) {
+		this.commandContext = commandContext;
 		TaskEntity task = commandContext.getTaskEntityManager().findTaskById(taskId);
 		if(task == null){
 			throw new ActivitiRunTimeException("当前任务节点不存在");
@@ -88,9 +92,9 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
 			MarkBackHistoricActivityInstanceCommand cmd2 = new MarkBackHistoricActivityInstanceCommand(activityId, task.getProcessInstanceId());
 			cmd2.execute(commandContext);
 		}
-		//删除冗余的执行节点 TODO
-		
-		return taskService.createTaskQuery().processInstanceId(task.getProcessInstanceId()).orderByTaskId().asc().list();
+		List<Task> tasks = new ArrayList<Task>();
+		tasks.addAll(commandContext.getTaskEntityManager().findTasksByProcessInstanceId(task.getProcessInstanceId()));
+		return tasks;
 	}
 	
 	/**
@@ -130,10 +134,9 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
 				}  
 				findOtherPassedActivityImpl(otherActivityImpl, needBacks, null);
 				turnTransition(t.getId(), otherActivityImpl, endActivityImpls);
-			}
-			if(!currentTasks.isEmpty()){
 				for (ActivityImpl activityImpl : endActivityImpls) {
-					myTaskService.deleteEndHistoricActivityInstance(activityImpl.getId(), task.getProcessInstanceId());
+					DeleteEndHistoricActivityInstanceCommand cmd = new DeleteEndHistoricActivityInstanceCommand(activityImpl.getId(), task.getProcessInstanceId());
+					cmd.execute(commandContext);
 				}
 			}
 		}
@@ -263,7 +266,7 @@ public class ProcessInstanceBackCommand extends MyCommand<List<Task>> {
         	newTransition.setDestination(targetActivityImpl);  
         	
         	// 执行转向任务  
-        	taskService.complete(taskId, variables);  
+        	new CompleteTaskCmd(taskId, variables).execute(commandContext);
         	// 删除目标节点新流入  
         	targetActivityImpl.getIncomingTransitions().remove(newTransition);  
         	
