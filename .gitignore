@@ -49,8 +49,6 @@ Temporary Items
 # java
 *.class
 *.log
-*.properties
-*.xml
 *.json
 
 /target
